@@ -223,24 +223,24 @@ const CompaniesPage = ({ onSelect, lists, addToList }) => {
   };
 
   return (
-    <div style={{ padding: "32px 36px", fontFamily: "'DM Sans', sans-serif" }}>
-      <div style={{ marginBottom: 24 }}>
-        <h1 style={{ fontSize: 24, fontWeight: 700, color: "#f5f5f5", margin: 0, letterSpacing: -0.5 }}>Companies</h1>
+    <div style={{ padding: "28px 24px", fontFamily: "'DM Sans', sans-serif", minWidth: 0 }}>
+      <div style={{ marginBottom: 20 }}>
+        <h1 style={{ fontSize: 22, fontWeight: 700, color: "#f5f5f5", margin: 0, letterSpacing: -0.5 }}>Companies</h1>
         <div style={{ color: "#555", fontSize: 13, marginTop: 4 }}>{filtered.length} companies match your thesis · loaded from CSV</div>
       </div>
 
-      <div style={{ display: "flex", gap: 10, marginBottom: 20, flexWrap: "wrap" }}>
+      <div style={{ display: "flex", gap: 8, marginBottom: 16, flexWrap: "wrap" }}>
         <input value={search} onChange={e => { setSearch(e.target.value); setPage(0); }}
           placeholder="Search companies, sectors, keywords…"
-          style={{ flex: 1, minWidth: 240, background: "#16161a", border: "1px solid #2a2a33", borderRadius: 8, padding: "9px 14px", color: "#e5e5e5", fontSize: 13, outline: "none", fontFamily: "inherit" }} />
+          style={{ flex: 1, minWidth: 160, background: "#16161a", border: "1px solid #2a2a33", borderRadius: 8, padding: "8px 12px", color: "#e5e5e5", fontSize: 13, outline: "none", fontFamily: "inherit" }} />
         {[["stage", STAGES, stage, v => { setStage(v); setPage(0); }],
           ["sector", SECTORS, sector, v => { setSector(v); setPage(0); }],
           ["country", COUNTRIES, country, v => { setCountry(v); setPage(0); }]
         ].map(([key, opts, val, setter]) => (
           <select key={key} value={val} onChange={e => setter(e.target.value)} style={{
             background: "#16161a", border: "1px solid #2a2a33", borderRadius: 8,
-            padding: "9px 12px", color: val.startsWith("All") ? "#555" : "#e5e5e5",
-            fontSize: 13, cursor: "pointer", outline: "none", fontFamily: "inherit"
+            padding: "8px 10px", color: val.startsWith("All") ? "#555" : "#e5e5e5",
+            fontSize: 12, cursor: "pointer", outline: "none", fontFamily: "inherit", maxWidth: 130
           }}>
             {opts.map(o => <option key={o}>{o}</option>)}
           </select>
@@ -255,8 +255,8 @@ const CompaniesPage = ({ onSelect, lists, addToList }) => {
         </div>
       )}
 
-      <div style={{ background: "#111114", border: "1px solid #1e1e24", borderRadius: 10, overflow: "hidden" }}>
-        <table style={{ width: "100%", borderCollapse: "collapse" }}>
+      <div style={{ background: "#111114", border: "1px solid #1e1e24", borderRadius: 10, overflow: "auto", maxWidth: "100%" }}>
+        <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 620 }}>
           <thead>
             <tr style={{ borderBottom: "1px solid #1e1e24" }}>
               <th style={{ width: 36, padding: "12px 14px" }}>
@@ -301,15 +301,33 @@ const CompaniesPage = ({ onSelect, lists, addToList }) => {
       </div>
 
       {pages > 1 && (
-        <div style={{ display: "flex", gap: 6, marginTop: 16, justifyContent: "flex-end" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, marginTop: 16 }}>
+          {/* Prev arrow */}
+          <button onClick={() => setPage(p => Math.max(0, p - 1))} disabled={page === 0} style={{
+            width: 32, height: 32, borderRadius: 6, border: "1px solid #2a2a33",
+            background: "transparent", color: page === 0 ? "#333" : "#888",
+            cursor: page === 0 ? "not-allowed" : "pointer", fontSize: 15, display: "flex",
+            alignItems: "center", justifyContent: "center"
+          }}>‹</button>
+
+          {/* Page numbers */}
           {Array.from({ length: pages }, (_, i) => (
             <button key={i} onClick={() => setPage(i)} style={{
-              width: 30, height: 30, borderRadius: 6, border: "1px solid",
+              width: 32, height: 32, borderRadius: 6, border: "1px solid",
               borderColor: i === page ? "#6366f1" : "#2a2a33",
               background: i === page ? "#6366f120" : "transparent",
-              color: i === page ? "#a78bfa" : "#555", fontSize: 12, cursor: "pointer"
+              color: i === page ? "#a78bfa" : "#555",
+              fontSize: 12, cursor: "pointer", fontFamily: "inherit", fontWeight: i === page ? 700 : 400
             }}>{i + 1}</button>
           ))}
+
+          {/* Next arrow */}
+          <button onClick={() => setPage(p => Math.min(pages - 1, p + 1))} disabled={page === pages - 1} style={{
+            width: 32, height: 32, borderRadius: 6, border: "1px solid #2a2a33",
+            background: "transparent", color: page === pages - 1 ? "#333" : "#888",
+            cursor: page === pages - 1 ? "not-allowed" : "pointer", fontSize: 15, display: "flex",
+            alignItems: "center", justifyContent: "center"
+          }}>›</button>
         </div>
       )}
     </div>
@@ -337,7 +355,7 @@ const CompanyProfile = ({ company, onBack, lists, addToList }) => {
   };
 
   return (
-    <div style={{ padding: "32px 36px", fontFamily: "'DM Sans', sans-serif", maxWidth: 900 }}>
+    <div style={{ padding: "28px 24px", fontFamily: "'DM Sans', sans-serif", maxWidth: "100%", minWidth: 0 }}>
       <button onClick={onBack} style={{ background: "transparent", border: "none", color: "#555", cursor: "pointer", fontSize: 13, display: "flex", alignItems: "center", gap: 6, marginBottom: 24, fontFamily: "inherit", padding: 0 }}>
         ← Back to Companies
       </button>
@@ -383,9 +401,9 @@ const CompanyProfile = ({ company, onBack, lists, addToList }) => {
         </div>
       </div>
 
-      <div style={{ display: "flex", gap: 12, marginBottom: 28 }}>
+      <div style={{ display: "flex", gap: 10, marginBottom: 24, flexWrap: "wrap" }}>
         {[["Funding", company.funding], ["Employees", company.employees], ["Sector", company.sector], ["Country", company.country]].map(([k, v]) => (
-          <div key={k} style={{ background: "#111114", border: "1px solid #1e1e24", borderRadius: 8, padding: "12px 16px", flex: 1 }}>
+          <div key={k} style={{ background: "#111114", border: "1px solid #1e1e24", borderRadius: 8, padding: "12px 16px", flex: "1 1 120px", minWidth: 100 }}>
             <div style={{ fontSize: 10, color: "#444", letterSpacing: 0.5, marginBottom: 4 }}>{k.toUpperCase()}</div>
             <div style={{ fontSize: 14, color: "#ccc", fontWeight: 600 }}>{v}</div>
           </div>
@@ -501,8 +519,8 @@ const ListsPage = ({ lists, setLists }) => {
   };
 
   return (
-    <div style={{ padding: "32px 36px", fontFamily: "'DM Sans', sans-serif" }}>
-      <h1 style={{ fontSize: 24, fontWeight: 700, color: "#f5f5f5", margin: 0, letterSpacing: -0.5, marginBottom: 24 }}>Lists</h1>
+    <div style={{ padding: "28px 24px", fontFamily: "'DM Sans', sans-serif", minWidth: 0 }}>
+      <h1 style={{ fontSize: 22, fontWeight: 700, color: "#f5f5f5", margin: 0, letterSpacing: -0.5, marginBottom: 24 }}>Lists</h1>
       <div style={{ display: "flex", gap: 8, marginBottom: 24 }}>
         <input value={newName} onChange={e => setNewName(e.target.value)} onKeyDown={e => e.key === "Enter" && createList()}
           placeholder="New list name…"
@@ -568,8 +586,8 @@ const SavedPage = ({ onGoToCompanies }) => {
   };
 
   return (
-    <div style={{ padding: "32px 36px", fontFamily: "'DM Sans', sans-serif" }}>
-      <h1 style={{ fontSize: 24, fontWeight: 700, color: "#f5f5f5", margin: 0, letterSpacing: -0.5, marginBottom: 24 }}>Saved Searches</h1>
+    <div style={{ padding: "28px 24px", fontFamily: "'DM Sans', sans-serif", minWidth: 0 }}>
+      <h1 style={{ fontSize: 22, fontWeight: 700, color: "#f5f5f5", margin: 0, letterSpacing: -0.5, marginBottom: 24 }}>Saved Searches</h1>
       <div style={{ background: "#111114", border: "1px solid #1e1e24", borderRadius: 10, padding: 20, marginBottom: 24 }}>
         <div style={{ fontSize: 12, color: "#555", marginBottom: 12, letterSpacing: 0.5 }}>SAVE A SEARCH</div>
         <div style={{ display: "flex", gap: 10 }}>
@@ -611,22 +629,24 @@ export default function App() {
   }, []);
 
   return (
-    <div style={{ display: "flex", minHeight: "100vh", background: "#0a0a0d", color: "#f5f5f5", fontFamily: "'DM Sans', sans-serif" }}>
+    <div style={{ display: "flex", minHeight: "100vh", width: "100%", maxWidth: "100vw", overflow: "hidden", background: "#0a0a0d", color: "#f5f5f5", fontFamily: "'DM Sans', sans-serif" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap');
+        html, body, #root { margin: 0; padding: 0; width: 100%; height: 100%; overflow-x: hidden; }
         * { box-sizing: border-box; }
-        ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-thumb { background: #2a2a33; border-radius: 3px; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #2a2a33; border-radius: 3px; }
         select option { background: #16161a; }
       `}</style>
 
       <Sidebar active={page === "profile" ? "companies" : page} setActive={p => { setPage(p); setSelectedCompany(null); }} lists={lists} />
 
-      <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "auto" }}>
-        <div style={{ background: "#0d0d0f", borderBottom: "1px solid #1e1e24", padding: "12px 36px", display: "flex", alignItems: "center", gap: 16, position: "sticky", top: 0, zIndex: 10 }}>
+      <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", overflow: "hidden" }}>
+        <div style={{ background: "#0d0d0f", borderBottom: "1px solid #1e1e24", padding: "12px 24px", display: "flex", alignItems: "center", gap: 16, position: "sticky", top: 0, zIndex: 10, flexShrink: 0 }}>
           <input placeholder="Global search… (⌘K)" style={{ flex: 1, maxWidth: 400, background: "#16161a", border: "1px solid #2a2a33", borderRadius: 8, padding: "7px 14px", color: "#ccc", fontSize: 13, outline: "none", fontFamily: "inherit" }} />
-          <div style={{ fontSize: 11, color: "#333", letterSpacing: 0.5 }}>{MOCK_COMPANIES.length} COMPANIES · CSV SEED</div>
+          <div style={{ fontSize: 11, color: "#333", letterSpacing: 0.5, whiteSpace: "nowrap" }}>{MOCK_COMPANIES.length} COMPANIES · CSV SEED</div>
         </div>
-        <main style={{ flex: 1 }}>
+        <main style={{ flex: 1, overflowY: "auto", overflowX: "hidden" }}>
           {page === "companies" && !selectedCompany && <CompaniesPage onSelect={c => { setSelectedCompany(c); setPage("profile"); }} lists={lists} addToList={addToList} />}
           {page === "profile" && selectedCompany && <CompanyProfile company={selectedCompany} onBack={() => { setSelectedCompany(null); setPage("companies"); }} lists={lists} addToList={addToList} />}
           {page === "lists" && <ListsPage lists={lists} setLists={setLists} />}
