@@ -2,7 +2,7 @@
 
 A VC sourcing and intelligence interface built with React + Vite, deployed on Vercel.
 
-**Live:** `https://your-url.vercel.app` 
+**Live:** `https://venturescope-jet.vercel.app` 
 
 ---
 
